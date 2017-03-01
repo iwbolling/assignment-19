@@ -6,21 +6,23 @@ import {githubApiKey} from "../../secrets.js";
 
 // VARIABLES - DOM ELEMENTS
 var divRouteContainer = document.querySelector(".route-content");
-var divUserProfile = document.querySelector(".user-profile");
-
-// VARIABLES - HASH LOCATIONS
-let currentRoute = window.location.hash;
+var inputGivenUser = document.querySelector(".pagenav_input input")
 
 // FUNCTIONS - PAGE CONTENT GENERATION
-function pageGen(githubApiKey,givenProfile){
-  console.log(givenProfile);
-  if (givenProfile === ""){
+function pageGen(){
+  divRouteContainer.innerHTML = "";
+  let currentRoute = window.location.hash;
+  let givenProfile
+  if (currentRoute === ""){
     givenProfile = "iwbolling";
-  };
-  _profileInfoGen(givenProfile);
-  _repoInfoGen(givenProfile);
+  } else {
+    givenProfile = currentRoute.slice(1)
+  }
+  _profileInfoGen(givenProfile, githubApiKey);
+  _repoInfoGen(givenProfile, githubApiKey);
 };
-function _profileInfoGen(givenProfile){
+pageGen();
+function _profileInfoGen(givenProfile, githubApiKey){
   let profileInfo = $.getJSON(`https://api.github.com/users/${givenProfile}?access_token=${githubApiKey}`).then(function(serverRes){
     divRouteContainer.innerHTML += `<div class="user-info-column">
                                       <img src="${serverRes.avatar_url}">
@@ -29,12 +31,13 @@ function _profileInfoGen(givenProfile){
                                     </div>`
   })
 };
-function _repoInfoGen(givenProfile){
+function _repoInfoGen(givenProfile, githubApiKey){
   let repoInfo = $.getJSON(`https://api.github.com/users/${givenProfile}/repos?access_token=${githubApiKey}`).then(function(serverRes){
     let genRepos = serverRes.map(function(repo){
       return `<div class="repo-block">
                 <h4>${repo.full_name}</h4>
                 <p>${repo.description}</p>
+                <hr/>
               </div>`
     }).join("");
     divRouteContainer.innerHTML += `<div class="repos-info-column">
@@ -44,4 +47,9 @@ function _repoInfoGen(givenProfile){
 };
 
 // EVENT LISTENERS - PAGE ROUTING
-window.addEventListener("hashchange",pageGen(githubApiKey,currentRoute.slice(1)));
+window.addEventListener("hashchange", pageGen);
+inputGivenUser.addEventListener("keydown",function(evt){
+  if (evt.keyCode === 13){
+    window.location.hash = inputGivenUser.value;
+  }
+})

@@ -1,5 +1,45 @@
+// STYLES - UNIVERAL
 * {box-sizing: border-box;}
 
-body{
-	font-family: Helvetica, Arial, sans-serif;
+body{font-family: Helvetica, Arial, sans-serif;}
+
+#app-container h2{
+	text-align: center;
+}
+
+.columns-container{
+	// display: inline-block;
+	font-size: 0;
+}
+
+// STYLES - PAGENAV
+.pagenav{
+	text-align: center;
+	width: 100%;
+}
+
+.pagenav_input, .pagenav_pull, .pagenav_issues, .pagenav_gist{
+	display: inline-block;
+	font-size: 16px;
+	width: 25%;
+}
+
+// STYLES - ROUTE CONTENT
+.user-info-column, .repos-info-column{
+	display: inline-block;
+	font-size: initial;
+	padding: 32px;
+	vertical-align: top;
+}
+
+.user-info-column{
+	width: 33%;
+}
+
+.user-info-column img{
+	width: 100%;
+}
+
+.repos-info-column{
+	width: 66%;
 }
